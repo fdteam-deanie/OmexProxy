@@ -1,0 +1,105 @@
+@media(max-width: 900px) {
+    .support-body {
+        max-width: 60%
+    }
+
+    .footer__inner {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        text-align: center;
+        gap: 32px
+    }
+
+    .footer-nav {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column
+    }
+
+    .footer-box {
+        padding-bottom: 32px;
+        border-bottom: 1px solid #f1f4ff
+    }
+
+    .footer-box .socials {
+        display: none
+    }
+
+    .footer-box .footer-box__copy {
+        display: none
+    }
+
+    .footer-box .logo {
+        margin-bottom: 0
+    }
+
+    .footer-box:last-child {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        padding-bottom: 0;
+        border-bottom: unset
+    }
+
+    .footer-box:last-child .socials {
+        display: block
+    }
+
+    .footer-box:last-child .footer-box__copy {
+        display: block
+    }
+
+    .footer-nav {
+        gap: 32px;
+        width: calc(100% + 20px);
+        margin-left: -10px;
+        margin-right: -10px
+    }
+
+    .footer-nav__wrapper {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        text-align: center;
+        width: 100%;
+        padding-bottom: 32px;
+        border-bottom: 1px solid #f1f4ff
+    }
+
+    .footer-nav__wrapper {
+        max-width: 100%
+    }
+
+    .footer-box {
+        width: calc(100% + 20px)
+    }
+}

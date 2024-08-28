@@ -1,0 +1,208 @@
+<template>
+    <BuyUnlimitedModal ref="buyUnlimitedModal" />
+    <RenewUnlimitedModal ref="renewUnlimitedModal" @renewed="getActiveUnlimitedSubscription()"/>
+    <ClaimBadProxyModal ref="claimBadProxyModal" />
+    <section class="page">
+        <div class="container">
+            <div class="proxies">
+                <div class="proxy_filter_row">
+                    <div class="filter_left filter_left_main">
+                        <div class="proxies_data_table">
+                        <table class="proxies_data">
+                            <thead class="proxy_sort">
+                                <Filters :filters="filters" @applied="getProxies"/>
+                            </thead>
+                            <tbody>
+                                <ProxyItem
+                                    v-for="proxy in proxies"
+                                    :key="proxy.id"
+                                    :is-selected="this.selectedProxy.id === proxy.id"
+                                    :proxy="proxy"
+                                    @click="proxyInfo(proxy)"
+                                />
+                                <tr class="per_page">
+                                    <td colspan="11" align="right">
+                                        <div class="pp">
+                                            <span>proxies per page</span>
+                                            <a
+                                                v-for="item in paginationValuesList"
+                                                @click="perPage = item"
+                                                :class="item === perPage ? 'active' : ''"
+                                            >
+                                                {{ item }}
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <ul class="pagination" style="display: none;">
+                            <li>
+                                <a href="#" class="prev"></a>
+                            </li>
+                            <li>
+                                <a href="#" class="active">1</a>
+                            </li>
+                            <li>
+                                <a href="#">2</a>
+                            </li>
+                            <li>
+                                <a href="#">3</a>
+                            </li>
+                            <li>
+                                <a href="#">4</a>
+                            </li>
+                            <li>
+                                <a href="#">5</a>
+                            </li>
+                            <li>
+                                <a href="#">6</a>
+                            </li>
+                            <li>
+                                <a href="#">7</a>
+                            </li>
+                            <li>
+                                <a href="#">8</a>
+                            </li>
+                            <li>
+                                <a href="#">9</a>
+                            </li>
+                            <li>
+                                <a href="#">10</a>
+                            </li>
+                            <li>
+                                <a href="#">...</a>
+                            </li>
+                            <li>
+                                <a href="#">150</a>
+                            </li>
+                            <li>
+                                <a href="#">175</a>
+                            </li>
+                            <li>
+                                <a href="#" class="next"></a>
+                            </li>
+                        </ul>
+                    </div>
+                    </div>
+                    <div class="filter_right ip_data">
+                        <ProxyDetail ref="proxyDetail">
+                            <template #header>
+                                <button v-if="!hasActiveUnlimitedSubscription" type="button" @click="showBuyUnlimitedModal()"  class="btn flex ai_center center width_auto margin_top_10">Buy unlimited ${{unlimitedSubscriptionPrice}}</button>
+                                <div v-if="hasActiveUnlimitedSubscription">
+                                    <h2>You have active unlimited subscription</h2>
+                                    <p>Expired at: {{unlimitedSubscription?.expired_at}}</p>
+                                </div>
+                                <button v-if="hasActiveUnlimitedSubscription" type="button" @click="showRenewUnlimitedModal()"  class="btn flex ai_center center width_auto margin_top_10">Renew subscription ${{unlimitedSubscriptionPrice}}</button>
+                            </template>
+                            <template #default>
+                                <QuickBuyProxy
+                                    v-if="selectedProxy.is_online && !selectedProxy.is_paid"
+                                    :proxy="selectedProxy"
+                                    @bought="bought"
+                                />
+                                <RenewRentalProxy
+                                    v-if="selectedProxy.is_paid && !hasActiveUnlimitedSubscription"
+                                    :proxy="selectedProxy"
+                                    @renewed="renewedRental"
+                                />
+                                <button v-if="selectedProxy.is_paid" type="button" @click="complain(selectedProxy)" class="btn flex ai_center center width_auto">
+                                    <span>Claim bad proxy</span>
+                                </button>
+                            </template>
+                        </ProxyDetail>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</template>
+
+<script>
+import MyProxies from "../components/ProxyCatalog/MyProxies.vue";
+import ProxyItem from "../components/History/ProxyItem.vue";
+import Filters from "../components/History/Filters.vue";
+import ClaimBadProxyModal from "../components/Modals/ClaimBadProxyModal.vue";
+import BalanceMixin from "../mixins/BalanceMixin.vue";
+import RentPeriodsMixin from "../mixins/RentPeriodsMixin.vue";
+import UnlimitedSubscriptionMixin from "../mixins/UnlimitedSubscriptionMixin.vue";
+import ProxyDetail from "../components/Common/ProxyDetail.vue";
+import HistoryService from "../services/api/HistoryService.js";
+import BuyUnlimitedModal from "../components/Modals/BuyUnlimitedModal.vue";
+import RenewUnlimitedModal from "../components/Modals/RenewUnlimitedModal.vue";
+import QuickBuyProxy from "../components/Common/QuickBuyProxy.vue";
+import RenewRentalProxy from "../components/Common/RenewRentalProxy.vue";
+export default {
+    name: "History",
+    components: {
+        QuickBuyProxy,
+        RenewRentalProxy,
+        RenewUnlimitedModal,
+        BuyUnlimitedModal,
+        ProxyDetail, ClaimBadProxyModal, Filters, MyProxies, ProxyItem},
+    mixins: [BalanceMixin, RentPeriodsMixin, UnlimitedSubscriptionMixin],
+    data() {
+        return {
+            proxies: [],
+            types: [],
+            paginationValuesList: [10, 25, 50, 100],
+            perPage: 10,
+            filters: {
+                ip: null,
+                is_online: null,
+                is_paid: null,
+                country: null,
+                state: null,
+                city: null,
+                zip: null,
+                isp: null,
+                type: null,
+                price: null,
+            },
+            selectedProxy: {},
+            buyLoader: false,
+            renewLoader: false,
+        }
+    },
+    methods: {
+        showBuyUnlimitedModal() {
+            this.$refs.buyUnlimitedModal.show()
+        },
+        showRenewUnlimitedModal() {
+            this.$refs.renewUnlimitedModal.show()
+        },
+        async proxyInfo(proxy) {
+            this.selectedProxy = proxy;
+            await this.$refs.proxyDetail.show(proxy.id);
+        },
+        async getProxies() {
+            await (new HistoryService)
+                .getProxies(this.filters)
+                .then((res) => {
+                    this.proxies = res.data.data;
+                })
+                .catch((err) => {
+                    console.error(err.response.data);
+                });
+        },
+        async bought(proxy, days) {
+            await this.getBalance();
+            await this.getProxies();
+        },
+        async renewedRental(proxy, days) {
+            await this.getBalance();
+            await this.getProxies();
+        },
+        async complain(proxy) {
+            this.$refs.claimBadProxyModal.show(proxy);
+        },
+    },
+    mounted() {
+        this.getProxies();
+        this.getRentPeriods();
+    },
+}
+</script>
+
+<style scoped>
+</style>

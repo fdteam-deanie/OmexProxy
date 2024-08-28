@@ -1,0 +1,32 @@
+<template>
+	<section class="display">
+		<div class="container flex jc_center">
+			<div class="dcenter">
+				<h2 class="color">The Best Value Residential</h2>
+				<h2 class="color_black">Proxy Service Provider</h2>
+				<p>
+					Best price on the market, Residential Proxies
+					<span class="color">$0.7 for 1GB</span>
+				</p>
+				<div class="buttons_inline">
+					<a href="#" class="btn">
+						<span>Start now</span>
+					</a>
+					<a href="#" class="btn btn_white hbtn_icon">
+						<div class="icon icon_google"></div>
+						<span>Sign up with Google</span>
+					</a>
+				</div>
+				<div class="macbook"></div>
+			</div>
+		</div>
+	</section>
+</template>
+<script>
+	export default {
+		name: 'Home',
+		mounted() {
+			console.log('Home');
+		}
+	}
+</script>

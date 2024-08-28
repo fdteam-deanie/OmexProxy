@@ -1,0 +1,304 @@
+<template>
+    <BuyUnlimitedModal ref="buyUnlimitedModal" />
+    <RenewUnlimitedModal ref="renewUnlimitedModal" @renewed="getActiveUnlimitedSubscription()"/>
+
+    <section class="page">
+		<div class="container">
+            <Breadcrumbs :bread-crumbs-data="breadCrumbsData"/>
+
+			<br />
+			<br />
+			<div class="proxies">
+				<div class="proxy_filter">
+					<div class="proxy_filter_row">
+						<div class="filter_left filter_left_main">
+							<div class="proxies_data_table">
+								<table class="proxies_data">
+									<thead class="proxy_sort">
+										<tr>
+											<th width="100px" style="width: 100px;">
+												<label>IP</label>
+											</th>
+											<th width="170px">
+												<label>Domain</label>
+											</th>
+											<th width="80px">
+												<label>State</label>
+											</th>
+											<th width="170px">
+												<label>City</label>
+											</th>
+											<th width="170px">
+												<label>ISP</label>
+											</th>
+											<th width="80px">
+												<label>ZIP</label>
+											</th>
+											<th width="80px">
+												<label>Speed</label>
+											</th>
+											<th width="80px">
+												<label>Ping</label>
+											</th>
+											<th width="80px">
+												<label>Type</label>
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="proxy in proxies" @click="proxyInfo(proxy)" :class="this.selectedProxy.id === proxy.id ? 'active' : ''">
+											<td>
+												<div class="pi_info flex ai_center">
+													<div class="flag" :style="{ backgroundImage: `url(${proxy.location.country.flag})` }"></div>
+													<span>{{ proxy.location.ip }}</span>
+												</div>
+											</td>
+											<td>
+												<span>{{ proxy.location.domain }}</span>
+											</td>
+											<td>
+												<span>{{ proxy.location.state }}</span>
+											</td>
+											<td>
+												<span>{{ proxy.location.city.name }}</span>
+											</td>
+											<td>
+												<span>{{ proxy.location.isp }}</span>
+											</td>
+											<td>
+												<span>{{ proxy.location.zip }}</span>
+											</td>
+											<td>
+												<span>&mdash;</span>
+											</td>
+											<td>
+												<span>&mdash;</span>
+											</td>
+											<td>
+												<span>{{ proxy.info.type }}</span>
+											</td>
+										</tr>
+										<tr class="per_page">
+											<td colspan="11" align="right">
+												<div class="pp">
+													<span>proxies per page</span>
+                                                    <a
+                                                        v-for="item in paginationValuesList"
+                                                        @click="perPage = item"
+                                                        :class="item === perPage ? 'active' : ''"
+                                                    >
+                                                        {{ item }}
+                                                    </a>
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								<ul class="pagination" style="display: none;">
+									<li>
+										<a href="#" class="prev"></a>
+									</li>
+									<li>
+										<a href="#" class="active">1</a>
+									</li>
+									<li>
+										<a href="#">2</a>
+									</li>
+									<li>
+										<a href="#">3</a>
+									</li>
+									<li>
+										<a href="#">4</a>
+									</li>
+									<li>
+										<a href="#">5</a>
+									</li>
+									<li>
+										<a href="#">6</a>
+									</li>
+									<li>
+										<a href="#">7</a>
+									</li>
+									<li>
+										<a href="#">8</a>
+									</li>
+									<li>
+										<a href="#">9</a>
+									</li>
+									<li>
+										<a href="#">10</a>
+									</li>
+									<li>
+										<a href="#">...</a>
+									</li>
+									<li>
+										<a href="#">150</a>
+									</li>
+									<li>
+										<a href="#">175</a>
+									</li>
+									<li>
+										<a href="#" class="next"></a>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="filter_right ip_data">
+                            <ProxyDetail ref="proxyDetail">
+                                <template #header>
+                                    <button v-if="!hasActiveUnlimitedSubscription" type="button" @click="showBuyUnlimitedModal()"  class="btn flex ai_center center width_auto margin_top_10">Buy unlimited ${{unlimitedSubscriptionPrice}}</button>
+                                    <div v-if="hasActiveUnlimitedSubscription">
+                                        <h2>You have active unlimited subscription</h2>
+                                        <p>Expired at: {{unlimitedSubscription?.expired_at}}</p>
+                                    </div>
+                                    <button v-if="hasActiveUnlimitedSubscription" type="button" @click="showRenewUnlimitedModal()"  class="btn flex ai_center center width_auto margin_top_10">Renew subscription ${{unlimitedSubscriptionPrice}}</button>
+                                </template>
+                                <template #default>
+                                    <RenewRentalProxy
+                                        v-if="!hasActiveUnlimitedSubscription"
+                                        :proxy="selectedProxy"
+                                        @renewed="renewedRental"
+                                    />
+                                </template>
+                             </ProxyDetail>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</template>
+<script>
+import BuyUnlimitedModal from "../components/Modals/BuyUnlimitedModal.vue";
+import RenewUnlimitedModal from "../components/Modals/RenewUnlimitedModal.vue";
+import CatalogService from "../services/api/CatalogService.js";
+import ProxyDetail from "../components/Common/ProxyDetail.vue";
+import RenewRentalProxy from "../components/Common/RenewRentalProxy.vue";
+import UnlimitedSubscriptionMixin from "../mixins/UnlimitedSubscriptionMixin.vue";
+import BalanceMixin from "../mixins/BalanceMixin.vue";
+import Breadcrumbs from "../components/Common/Breadcrumbs.vue";
+
+export default {
+    name: 'MyProxies',
+    components: {Breadcrumbs, RenewRentalProxy, ProxyDetail, BuyUnlimitedModal, RenewUnlimitedModal},
+    mixins: [UnlimitedSubscriptionMixin, BalanceMixin],
+    data() {
+      return {
+          breadCrumbsData: [
+              { title:'User account', path: '/user/account' },
+              { title:'My Proxies', path: '/user/my' },
+          ],
+        // loggedIn: authUser,
+        filters: new CatalogService({
+          filters: true,
+          ip: null,
+          domain: null,
+          state: null,
+          city: null,
+          isp: null,
+          zip: null,
+          type: null,
+          added: null,
+        }),
+        proxies: [],
+        selectedProxy: {
+
+          id: null,
+          location: {
+
+            country: {
+              id: null,
+              country: null,
+              flag: null,
+            },
+            city: {
+              id: null,
+              name: null
+            },
+            domain: null,
+            org: null,
+            isp: null,
+            state: null,
+
+          },
+          blacklist: {
+            status: 'clear',
+          },
+          info: {
+
+            added: null,
+            type: null,
+            ping: null,
+            speed: null,
+            dns: null,
+            usage: null,
+
+          },
+          price: null,
+
+        },
+        paginationValuesList: [ 25, 50, 75, 100, 150 ],
+        perPage: 25,
+      }
+    },
+    mounted() {
+      this.loadProxies();
+      console.log('ProxyCatalog');
+
+    },
+    methods: {
+
+        showBuyUnlimitedModal() {
+            this.$refs.buyUnlimitedModal.show()
+        },
+
+        showRenewUnlimitedModal() {
+            this.$refs.renewUnlimitedModal.show()
+        },
+
+        async filtersApply() {
+            await this.filters
+                .postCatalog()
+                .then((response) => {
+                    if (response.data.status === 'success') {
+                      this.proxies = response.data.result.proxies;
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        },
+        async renewedRental(proxy, days) {
+            await this.getBalance();
+            await this.getProxies();
+        },
+        async proxyInfo(proxy) {
+            this.selectedProxy = proxy;
+            await this.$refs.proxyDetail.show(proxy.id);
+        },
+
+        async loadProxies() {
+            await (new CatalogService)
+                .getMyCatalog()
+                .then((res) => {
+                    this.proxies = res.data.result.proxies;
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+
+        }
+
+    },
+    watch: {
+        perPage() {
+            // this.updateList();
+        }
+    },
+    computed: {
+        loggedIn() {
+            return this.$store.getters.loggedIn
+        }
+    }
+}
+</script>

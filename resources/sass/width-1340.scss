@@ -1,0 +1,631 @@
+@media(max-width: 1340px) {
+    .heading__title {
+        margin-bottom: calc(30px + 20 * ((100vw - 320px) / 1020));
+        padding-left: calc(20px + 5 * ((100vw - 320px) / 1020));
+        font-size: calc(35px + 17 * ((100vw - 320px) / 1020));
+        line-height: calc(42px + 14 * ((100vw - 320px) / 1020));
+
+        &::before {
+            width: calc(3px + 2 * ((100vw - 320px) / 1020));
+        }
+    }
+
+    .heading__text {
+        margin-bottom: calc(20px + 5 * ((100vw - 320px) / 1020));
+        font-size: calc(14px + 4 * ((100vw - 320px) / 1020));
+        line-height: calc(18px + 5 * ((100vw - 320px) / 1020));
+    }
+
+    .breadcrumbs {
+        padding-top: calc(15px + 10 * ((100vw - 320px) / 1020));
+        margin-bottom: calc(20px + 30 * ((100vw - 320px) / 1020));
+    }
+
+    .breadcrumbs__list-link {
+        font-size: calc(14px + 4 * ((100vw - 320px) / 1020));
+        line-height: calc(16px + 5 * ((100vw - 320px) / 1020));
+    }
+
+    .breadcrumbs__list-text {
+        font-size: calc(14px + 4 * ((100vw - 320px) / 1020));
+        line-height: calc(16px + 5 * ((100vw - 320px) / 1020));
+    }
+
+    .btn {
+        font-size: calc(16px + 2 * ((100vw - 320px) / 1020));
+        line-height: calc(19px + 3 * ((100vw - 320px) / 1020));
+    }
+
+    .header-box {
+        gap: calc(24px + 16 * ((100vw - 320px) / 1020));
+    }
+
+    .header-box__link--wallet::before {
+        left: calc(-13px + -8 * ((100vw - 320px) / 1020));
+    }
+
+    .banner {
+        margin-bottom: calc(35px + -15 * ((100vw - 320px) / 1020));
+
+        .heading__title {
+            margin-bottom: calc(40px + 10 * ((100vw - 320px) / 1020));
+        }
+    }
+
+    .banner__heading {
+        margin-bottom: calc(25px + 7 * ((100vw - 320px) / 1020));
+    }
+
+    .banner__img {
+        margin-bottom: calc(-6px + -124 * ((100vw - 320px) / 1020));
+        width: calc(325px + 433 * ((100vw - 320px) / 1020));
+        height: calc(215px + 244 * ((100vw - 320px) / 1020));
+    }
+
+    .banner-links {
+        gap: calc(12px + 8 * ((100vw - 320px) / 1020));
+        margin-bottom: calc(30px + 30 * ((100vw - 320px) / 1020));
+    }
+
+    .partners {
+        margin-bottom: calc(60px + 115 * ((100vw - 320px) / 1020));
+    }
+
+    .partners-slide__img {
+        width: calc(117px + 86 * ((100vw - 320px) / 1020));
+        height: calc(48px + 17 * ((100vw - 320px) / 1020));
+    }
+
+    .account {
+        padding-bottom: calc(60px + 20 * ((100vw - 320px) / 1020));
+    }
+
+    .account__tubs {
+        margin-bottom: calc(20px + 15 * ((100vw - 320px) / 1020));
+    }
+
+    .account__tubs-button {
+        font-size: calc(16px + 8 * ((100vw - 320px) / 1020));
+        line-height: calc(19px + 9 * ((100vw - 320px) / 1020));
+
+        ::after {
+            bottom: calc(-1.5px + -2.5 * ((100vw - 320px) / 1020));
+            height: calc(3px + 5 * ((100vw - 320px) / 1020));
+        }
+    }
+
+    .account__text {
+        font-size: calc(14px + 4 * ((100vw - 320px) / 1020));
+        line-height: calc(16px + 5 * ((100vw - 320px) / 1020));
+        margin-bottom: calc(20px + 5 * ((100vw - 320px) / 1020));
+    }
+
+    .account__subtext {
+        margin-top: calc(25px + 5 * ((100vw - 320px) / 1020));
+        font-size: calc(14px + 4 * ((100vw - 320px) / 1020));
+        line-height: calc(16px + 5 * ((100vw - 320px) / 1020));
+    }
+
+    .account-box {
+        margin-bottom: calc(20px + 5 * ((100vw - 320px) / 1020));
+    }
+
+    .account-box__updated {
+        font-size: calc(14px + 4 * ((100vw - 320px) / 1020));
+        line-height: calc(16px + 5 * ((100vw - 320px) / 1020));
+        margin-bottom: calc(15px + 15 * ((100vw - 320px) / 1020));
+    }
+
+    .account-box__error {
+        @extend .account-box__updated;
+    }
+
+    .account-box__text {
+        font-size: calc(14px + 4 * ((100vw - 320px) / 1020));
+        line-height: calc(16px + 5 * ((100vw - 320px) / 1020));
+        margin-bottom: calc(10px + 5 * ((100vw - 320px) / 1020));
+    }
+
+    .account-box__generate {
+        font-size: calc(14px + 4 * ((100vw - 320px) / 1020));
+        line-height: calc(16px + 5 * ((100vw - 320px) / 1020));
+    }
+
+    .account-heading {
+        gap: calc(20px + 10 * ((100vw - 320px) / 1020));
+        margin-bottom: calc(35px + 15 * ((100vw - 320px) / 1020));
+    }
+
+    .account-heading__title {
+        font-size: calc(35px + 17 * ((100vw - 320px) / 1020));
+        line-height: calc(42px + 21 * ((100vw - 320px) / 1020));
+    }
+
+    .account-heading__link {
+        font-size: calc(14px + 4 * ((100vw - 320px) / 1020));
+        line-height: calc(16px + 5 * ((100vw - 320px) / 1020));
+        gap: calc(10px + 10 * ((100vw - 320px) / 1020));
+    }
+
+    .account-heading__link-icon {
+        width: calc(34px + 10 * ((100vw - 320px) / 1020));
+        height: calc(34px + 10 * ((100vw - 320px) / 1020));
+
+        img {
+            width: calc(14px + 10 * ((100vw - 320px) / 1020));
+            height: calc(14px + 10 * ((100vw - 320px) / 1020));
+        }
+    }
+
+    .account-form__button {
+        font-size: calc(14px + 4 * ((100vw - 320px) / 1020));
+        line-height: calc(16px + 6 * ((100vw - 320px) / 1020));
+        padding-top: calc(16.5px + 3.5 * ((100vw - 320px) / 1020));
+        padding-bottom: calc(16.5px + 3.5 * ((100vw - 320px) / 1020));
+    }
+
+    .account-form__box--active .account-form__box-label {
+        font-size: calc(10px + 2 * ((100vw - 320px) / 1020));
+        line-height: calc(12px + 2 * ((100vw - 320px) / 1020));
+        top: calc(7px + 4 * ((100vw - 320px) / 1020));
+    }
+
+    .account-form__box-label {
+        font-size: calc(14px + 4 * ((100vw - 320px) / 1020));
+        line-height: calc(16px + 5 * ((100vw - 320px) / 1020));
+        top: calc(16px + 4 * ((100vw - 320px) / 1020));
+        left: calc(12px + 8 * ((100vw - 320px) / 1020));
+    }
+
+    .account-form__box-input {
+        padding-top: calc(23px + 7 * ((100vw - 320px) / 1020));
+        padding-bottom: calc(7px + 4 * ((100vw - 320px) / 1020));
+        padding-left: calc(12px + 8 * ((100vw - 320px) / 1020));
+        padding-right: calc(12px + 8 * ((100vw - 320px) / 1020));
+        font-size: calc(14px + 4 * ((100vw - 320px) / 1020));
+        line-height: calc(16px + 5 * ((100vw - 320px) / 1020));
+    }
+
+    .account-bg {
+        width: calc(320px + 1600 * ((100vw - 320px) / 1020))
+    }
+
+    .advantages {
+        margin-bottom: calc(60px + 70 * ((100vw - 320px) / 1020));
+    }
+
+    .advantages__heading {
+        margin-bottom: calc(30px + 20 * ((100vw - 320px) / 1020));
+    }
+
+    .advantages-list {
+        row-gap: calc(10px + 6 * ((100vw - 320px) / 1020));
+    }
+
+    .advantages-list__item {
+        padding: calc(24px + 8 * ((100vw - 320px) / 1020));
+    }
+
+    .advantages-list__text {
+        font-size: calc(14px + 4 * ((100vw - 320px) / 1020));
+        line-height: calc(18px + 5 * ((100vw - 320px) / 1020));
+    }
+
+    .advantages-list__top {
+        margin-bottom: calc(12px + 12 * ((100vw - 320px) / 1020));
+    }
+
+    .advantages-list__top-count {
+        font-size: calc(18px + 6 * ((100vw - 320px) / 1020));
+        line-height: calc(22px + 4 * ((100vw - 320px) / 1020));
+    }
+
+    .advantages-list__top-title {
+        font-size: calc(18px + 6 * ((100vw - 320px) / 1020));
+        line-height: calc(22px + 4 * ((100vw - 320px) / 1020));
+    }
+
+    .about-body__list-item {
+        padding-left: calc(25px + 20 * ((100vw - 320px) / 1020));
+        font-size: calc(14px + 4 * ((100vw - 320px) / 1020));
+    }
+
+    .about--proxy {
+        margin-bottom: calc(60px + 80 * ((100vw - 320px) / 1020));
+
+        .about-body__heading {
+            margin-bottom: calc(20px + 5 * ((100vw - 320px) / 1020));
+        }
+
+        .about__img {
+            padding-top: calc(0px + 15 * ((100vw - 320px) / 1020));
+            width: calc(299px + 216 * ((100vw - 320px) / 1020));
+            height: calc(206px + 149 * ((100vw - 320px) / 1020));
+        }
+    }
+
+    .about--verification {
+        margin-bottom: calc(85px + 100 * ((100vw - 320px) / 1020));
+
+        .about__img {
+            margin-top: calc(0px + -15 * ((100vw - 320px) / 1020));
+            width: calc(300px + 192 * ((100vw - 320px) / 1020));
+            height: calc(217px + 142 * ((100vw - 320px) / 1020));
+        }
+
+        .heading__title {
+            margin-bottom: calc(20px + 30 * ((100vw - 320px) / 1020));
+        }
+    }
+
+    .about-bg {
+        width: calc(320px + 1600 * ((100vw - 320px) / 1020));
+        height: calc(990px + 212 * ((100vw - 320px) / 1020));
+        top: calc(30px + -330 * ((100vw - 320px) / 1020));
+    }
+
+    .faq {
+        padding-bottom: calc(60px + 70 * ((100vw - 320px) / 1020));
+    }
+
+    .faq__heading {
+        margin-bottom: calc(15px + 35 * ((100vw - 320px) / 1020))
+    }
+
+    .faq-list__text {
+        font-size: calc(14px + 4 * ((100vw - 320px) / 1020));
+        line-height: calc(16px + 7 * ((100vw - 320px) / 1020));
+    }
+
+    .faq-list-top__title {
+        font-size: calc(18px + 6 * ((100vw - 320px) / 1020));
+        line-height: calc(21px + 11 * ((100vw - 320px) / 1020));
+    }
+
+    .faq-list-top__arrow {
+        width: calc(43px + 10 * ((100vw - 320px) / 1020));
+        height: calc(43px + 10 * ((100vw - 320px) / 1020));
+        min-width: calc(43px + 10 * ((100vw - 320px) / 1020));
+        min-height: calc(43px + 10 * ((100vw - 320px) / 1020));
+
+        svg {
+            width: calc(12px + 5 * ((100vw - 320px) / 1020));
+        }
+    }
+
+    .support {
+        margin-bottom: calc(60px + 70 * ((100vw - 320px) / 1020));
+    }
+
+    .support__inner {
+        padding-right: calc(25px + 85 * ((100vw - 320px) / 1020));
+        padding-bottom: calc(60px + 50 * ((100vw - 320px) / 1020));
+        padding-left: calc(25px + 85 * ((100vw - 320px) / 1020));
+    }
+
+    .support__img {
+        width: calc(266px + 271 * ((100vw - 320px) / 1020));
+        height: calc(332px + 332 * ((100vw - 320px) / 1020));
+    }
+
+    .support-body__heading {
+        margin-bottom: calc(15px + 10 * ((100vw - 320px) / 1020));
+    }
+
+    .support-body__list {
+        margin-bottom: calc(12px + 13 * ((100vw - 320px) / 1020));
+    }
+
+    .support-body__list-item {
+        gap: calc(12px + 3 * ((100vw - 320px) / 1020));
+        padding-bottom: calc(12px + 5 * ((100vw - 320px) / 1020));
+        padding-left: calc(18px + 30 * ((100vw - 320px) / 1020));
+
+        &::before {
+            top: calc(3px + 3 * ((100vw - 320px) / 1020));
+        }
+    }
+
+    .support-body__list-title {
+        font-size: calc(14px + 4 * ((100vw - 320px) / 1020));
+        line-height: calc(18px + 5 * ((100vw - 320px) / 1020));
+    }
+
+    .support-body__list-text {
+        font-size: calc(14px + 4 * ((100vw - 320px) / 1020));
+        line-height: calc(18px + 5 * ((100vw - 320px) / 1020));
+    }
+
+    .more {
+        margin-bottom: calc(60px + 70 * ((100vw - 320px) / 1020));
+
+        .heading__title {
+            margin-bottom: calc(20px + 30 * ((100vw - 320px) / 1020));
+        }
+
+        .heading__title {
+            margin-bottom: calc(20px + 30 * ((100vw - 320px) / 1020));
+        }
+    }
+
+    .more__inner {
+        row: calc(10px + 60 * ((100vw - 320px) / 1020));
+    }
+
+    .more-bg {
+        width: calc(320px + 1600 * ((100vw - 320px) / 1020));
+        height: calc(1850px + -190 * ((100vw - 320px) / 1020));
+        top: calc(150px + -500 * ((100vw - 320px) / 1020));
+    }
+
+    .more-item__text {
+        font-size: calc(14px + 4 * ((100vw - 320px) / 1020));
+        line-height: calc(16px + 7 * ((100vw - 320px) / 1020));
+    }
+
+    .more-item-titling__title {
+        font-size: calc(18px + 6 * ((100vw - 320px) / 1020));
+        line-height: calc(21px + 11 * ((100vw - 320px) / 1020))
+    }
+
+    .more-item-titling__arrow {
+        width: calc(28px + 12 * ((100vw - 320px) / 1020));
+        height: calc(28px + 12 * ((100vw - 320px) / 1020));
+        min-width: calc(28px + 12 * ((100vw - 320px) / 1020));
+        min-height: calc(28px + 12 * ((100vw - 320px) / 1020));
+
+        svg {
+            width: calc(11px + 4 * ((100vw - 320px) / 1020));
+        }
+    }
+
+    .pricing {
+        margin-bottom: calc(65px + 65 * ((100vw - 320px) / 1020));
+    }
+
+    .pricing__heading {
+        margin-bottom: calc(10px + 40 * ((100vw - 320px) / 1020));
+    }
+
+    .pricing__inner {
+        gap: calc(12px + 8 * ((100vw - 320px) / 1020));
+    }
+
+    .pricing-item {
+        padding-top: calc(24px + 8 * ((100vw - 320px) / 1020));
+        padding-bottom: calc(24px + 8 * ((100vw - 320px) / 1020));
+    }
+
+    .pricing-item__count {
+        font-size: calc(14px + 4 * ((100vw - 320px) / 1020));
+        line-height: calc(17px + 5 * ((100vw - 320px) / 1020));
+        margin-bottom: calc(12px + 4 * ((100vw - 320px) / 1020));
+    }
+
+    .pricing-item__text {
+        font-size: calc(14px + 4 * ((100vw - 320px) / 1020));
+        line-height: calc(16px + 5 * ((100vw - 320px) / 1020));
+        margin-bottom: calc(12px + 12 * ((100vw - 320px) / 1020));
+    }
+
+    .pricing-item__price {
+        padding: calc(14px + 14 * ((100vw - 320px) / 1020));
+        font-size: calc(24px + 6 * ((100vw - 320px) / 1020));
+        line-height: calc(29px + 7 * ((100vw - 320px) / 1020));
+    }
+
+    .pricing-item__list {
+        margin-bottom: calc(20px + 12 * ((100vw - 320px) / 1020));
+        padding-right: calc(24px + 8 * ((100vw - 320px) / 1020));
+        padding-left: calc(24px + 8 * ((100vw - 320px) / 1020));
+    }
+
+    .pricing-item__list-item {
+        font-size: calc(14px + 4 * ((100vw - 320px) / 1020));
+        line-height: calc(18px + 5 * ((100vw - 320px) / 1020));
+
+        &::before {
+            top: calc(3px + 3 * ((100vw - 320px) / 1020));
+        }
+    }
+
+    .pricing-item__wrap {
+        padding-left: calc(24px + 8 * ((100vw - 320px) / 1020));
+        padding-right: calc(24px + 8 * ((100vw - 320px) / 1020));
+    }
+
+    .pricing-box {
+        padding: calc(16px + 8 * ((100vw - 320px) / 1020)) calc(24px + 8 * ((100vw - 320px) / 1020));
+        margin-bottom: calc(15px + 9 * ((100vw - 320px) / 1020));
+    }
+
+    .pricing-box__text {
+        font-size: calc(14px + 4 * ((100vw - 320px) / 1020));
+        line-height: calc(16px + 5 * ((100vw - 320px) / 1020));
+    }
+
+    .map__heading {
+        margin-bottom: calc(30px + 20 * ((100vw - 320px) / 1020));
+    }
+
+    .map-view {
+        margin-bottom: calc(90px + 10 * ((100vw - 320px) / 1020));
+    }
+
+    .map-view-box__location {
+        top: calc(-2px + -8 * ((100vw - 320px) / 1020));
+        left: calc(-1px + -4 * ((100vw - 320px) / 1020));
+
+        svg {
+            width: calc(9px + 29 * ((100vw - 320px) / 1020));
+            height: calc(10px + 34 * ((100vw - 320px) / 1020))
+        }
+    }
+
+    .map-view-box {
+        &:nth-child(1) {
+            top: calc(40px + 105 * ((100vw - 320px) / 1020));
+            left: calc(15px + 71 * ((100vw - 320px) / 1020));
+        }
+
+        &:nth-child(2) {
+            top: calc(100px + 170 * ((100vw - 320px) / 1020));
+            left: calc(50px + 130 * ((100vw - 320px) / 1020));
+        }
+
+        &:nth-child(3) {
+            bottom: calc(25px + 125 * ((100vw - 320px) / 1020));
+            left: calc(50px + 318 * ((100vw - 320px) / 1020));
+        }
+
+        &:nth-child(4) {
+            top: calc(100px + 190 * ((100vw - 320px) / 1020));
+            left: calc(125px + 470 * ((100vw - 320px) / 1020));
+        }
+
+        &:nth-child(5) {
+            bottom: calc(0px + 180 * ((100vw - 320px) / 1020));
+            right: calc(25px + 455 * ((100vw - 320px) / 1020));
+        }
+
+        &:nth-child(6) {
+            top: calc(20px + 120 * ((100vw - 320px) / 1020));
+            right: calc(-50px + 70 * ((100vw - 320px) / 1020));
+        }
+
+        &:nth-child(7) {
+            top: calc(50px + 250 * ((100vw - 320px) / 1020));
+            right: calc(-50px + 215 * ((100vw - 320px) / 1020));
+        }
+
+        &:nth-child(8) {
+            bottom: calc(0px + 100 * ((100vw - 320px) / 1020));
+            right: calc(-75px + 100 * ((100vw - 320px) / 1020));
+        }
+    }
+
+    .map-view-box-column {
+        padding-top: calc(3px + 11 * ((100vw - 320px) / 1020));
+        padding-right: calc(3px + 11 * ((100vw - 320px) / 1020));
+        padding-bottom: calc(3px + 11 * ((100vw - 320px) / 1020));
+        padding-left: calc(10px + 37 * ((100vw - 320px) / 1020));
+    }
+
+    .map-view-box-column__country {
+        gap: calc(3px + 3 * ((100vw - 320px) / 1020));
+    }
+
+    .map-view-box-column__country-icon {
+        width: calc(11px + 8 * ((100vw - 320px) / 1020));
+        height: calc(11px + 8 * ((100vw - 320px) / 1020));
+    }
+
+    .map-view-box-column__country-text {
+        font-size: calc(14px + 2 * ((100vw - 320px) / 1020));
+        line-height: calc(20px + 3 * ((100vw - 320px) / 1020))
+    }
+
+    .map-view-box-column__text {
+        font-size: calc(14px + 2 * ((100vw - 320px) / 1020));
+        line-height: calc(20px + 3 * ((100vw - 320px) / 1020));
+    }
+
+    .goods {
+        margin-bottom: calc(40px + 40 * ((100vw - 320px) / 1020));
+    }
+
+    .goods-item__text {
+        font-size: calc(24px + 6 * ((100vw - 320px) / 1020));
+        line-height: calc(29px + 7 * ((100vw - 320px) / 1020));
+        margin-bottom: calc(12px + 2 * ((100vw - 320px) / 1020));
+    }
+
+    .goods-item__subtext {
+        font-size: calc(14px + 4 * ((100vw - 320px) / 1020));
+        line-height: calc(16px + 5 * ((100vw - 320px) / 1020));
+    }
+
+    .сompetitors {
+        margin-bottom: calc(60px + 70 * ((100vw - 320px) / 1020));
+    }
+
+    .footer {
+        padding-top: calc(30px + 15 * ((100vw - 320px) / 1020));
+        padding-bottom: calc(40px + 10 * ((100vw - 320px) / 1020));
+    }
+
+    .socials {
+        margin-bottom: calc(32px + 18 * ((100vw - 320px) / 1020));
+    }
+
+    .socials__title {
+        margin-bottom: calc(10px + 20 * ((100vw - 320px) / 1020));
+        font-size: calc(18px + 6 * ((100vw - 320px) / 1020));
+    }
+
+    .footer-nav__title {
+        font-size: calc(18px + 6 * ((100vw - 320px) / 1020));
+        margin-bottom: calc(20px + 10 * ((100vw - 320px) / 1020));
+    }
+
+    .footer-nav__list-link {
+        font-size: calc(14px + 2 * ((100vw - 320px) / 1020));
+        line-height: calc(18px + 5 * ((100vw - 320px) / 1020));
+    }
+
+    .menu {
+        display: none
+    }
+
+    .burger {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex
+    }
+
+    .header-box {
+        margin-left: auto
+    }
+
+    .header__inner {
+        gap: 15px
+    }
+
+    .body--active {
+        overflow: hidden;
+
+        .menu {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            text-align: center;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            position: fixed;
+            background: #fff;
+            z-index: 100;
+        }
+
+        .menu-list {
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+            flex-direction: column
+        }
+    }
+
+}

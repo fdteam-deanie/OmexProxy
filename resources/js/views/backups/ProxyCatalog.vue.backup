@@ -1,0 +1,746 @@
+<template>
+    <CartModal
+        v-if="cartModalShow"
+        :orderStatus="orderStatus"
+        :orderMessage="orderMessage"
+        :orderedProxies="orderedProxies"
+        :hasActiveUnlimitedSubscription="hasActiveUnlimitedSubscription"
+        @close-modal="cartModalShow = false"
+        @delete-from-cart="deleteFromCart"
+        @update-cart-item="updateCartItem"
+        @confirm-order="confirmOrder"
+    />
+    <BuyUnlimitedModal ref="buyUnlimitedModal" @bought="boughtUnlimitedSubscription()"/>
+	<section class="page">
+		<div class="container">
+			<div class="proxies">
+				<div class="proxy_filter">
+					<div class="proxy_filter_row pfr_first">
+						<div class="filter_left">
+							<ul class="continents">
+								<li v-for="continent in continents">
+									<a href="#" @click="selectContinent(continent.id)" :class="this.continentId == continent.id ? 'active' : ''">
+										{{ continent.name }}
+										<span>{{ continent.count }}</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="filter_right">
+							<ul class="countries">
+								<li v-for="country in countries">
+									<a href="javascript:void(0);" @click="selectCountry(country.id)">
+										<div class="flag" :style="{ backgroundImage: `url(${country.flag})` }"></div>
+										<span>{{ country.name }} - {{ country.count }}</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="proxy_filter_row">
+						<div class="filter_left filter_left_main">
+							<div class="proxy_filter_row bordered">
+								<div :class="topFiltersShown ? 'filter_toggle active' : 'filter_toggle'">
+									<div @click="topFiltersShown = 1" v-if="!topFiltersShown" class="top_filters_label">
+										<div class="icon icon_filter"></div>
+										<span>Filters</span>
+									</div>
+									<div v-if="topFiltersShown" class="filters_ch">
+										<div class="fch">
+											<label for="eup">
+												<input id="eup" type="checkbox" v-model="filters.eup" @change="filtersApply" />
+												<span>Exclude used proxies</span>
+											</label>
+										</div>
+										<div class="fch">
+											<label for="ebp">
+												<input id="ebp" type="checkbox" v-model="filters.ebp"  @change="filtersApply" />
+												<span>Exclude blacklisted proxies</span>
+											</label>
+										</div>
+										<div class="fch">
+											<label for="rop">
+												<input id="rop" type="checkbox" v-model="filters.rop"  @change="filtersApply" />
+												<span>Residential only proxies</span>
+											</label>
+										</div>
+										<div class="fch">
+											<label for="ear">
+												<input id="ear" type="checkbox" v-model="autoRefresh" />
+												<span>Enable autorefresh</span>
+											</label>
+										</div>
+										<div class="fch">
+											<label for="mp">
+												<input id="mp" type="checkbox" v-model="filters.mp"  @change="filtersApply" />
+												<span>Mobile proxy</span>
+											</label>
+										</div>
+										<div class="fch">
+											<label for="sp">
+												<input id="sp" type="checkbox" v-model="filters.sp"  @change="filtersApply" />
+												<span>Server proxies</span>
+											</label>
+										</div>
+										<button @click="resetTopFilters" type="btn_inline">reset filters</button>
+										<button @click="topFiltersShown = 0" type="btn_hide">hide filters</button>
+									</div>
+								</div>
+							</div>
+							<div class="proxies_data_table">
+								<table class="proxies_data">
+									<thead class="proxy_sort">
+										<tr>
+											<th width="100px" style="width: 100px;">
+												<label>IP</label>
+												<input type="text" v-model="filters.ip" @keyup="filtersApply" placeholder="IP" class="form_input" />
+											</th>
+											<th width="170px">
+												<label>Domain</label>
+												<input type="text" v-model="filters.domain" @keyup="filtersApply" placeholder="Domain" class="form_input" />
+											</th>
+											<th width="80px">
+												<label>State</label>
+												<input type="text" v-model="filters.state" @keyup="filtersApply" placeholder="State" class="form_input" />
+											</th>
+											<th width="170px">
+												<label>City</label>
+												<input type="text" v-model="filters.city" @keyup="filtersApply" placeholder="City" class="form_input" />
+											</th>
+											<th width="170px">
+												<label>ISP</label>
+												<input type="text" v-model="filters.isp" @keyup="filtersApply" placeholder="ISP" class="form_input" />
+											</th>
+											<th width="80px">
+												<label>ZIP</label>
+												<input type="text" v-model="filters.zip" @keyup="filtersApply" placeholder="ZIP" class="form_input" />
+											</th>
+											<th width="80px">
+												<label>Speed</label>
+												<div class="form_input"></div>
+											</th>
+											<th width="80px">
+												<label>Ping</label>
+												<div class="form_input"></div>
+											</th>
+											<th width="80px">
+												<label>Type</label>
+												<select v-model="filters.type" @change="filtersApply" class="form_input">
+													<option>Any</option>
+													<option :key="type.id" :value="type.id" v-for="type in types">
+														{{ type.name }}
+													</option>
+												</select>
+											</th>
+											<th width="80px">
+												<label>Added</label>
+												<select v-model="filters.added" @change="filtersApply" class="form_input">
+													<option>Any</option>
+													<option value="today">Today</option>
+													<option value="3">Last 3 days</option>
+													<option value="week">Last week</option>
+													<option value="month">Last month</option>
+												</select>
+											</th>
+											<th width="80px">
+												<label>Max. Price</label>
+												<input pattern="[0-9.]+" type="text" v-model="filters.price" @keyup="filtersApply" @keypress="priceMask($event)" placeholder="Apply" class="form_input" />
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="proxy in proxies" @click="proxyInfo(proxy)" :class="this.selectedProxy.id == proxy.id ? 'active' : ''">
+											<td>
+												<div class="pi_info flex ai_center">
+													<div class="flag" :style="{ backgroundImage: `url(${proxy.location.country.flag})` }"></div>
+													<span>{{ proxy.location.ip }}</span>
+												</div>
+											</td>
+											<td>
+												<span>{{ proxy.location.domain }}</span>
+											</td>
+											<td>
+												<span>{{ proxy.location.state }}</span>
+											</td>
+											<td>
+												<span>{{ proxy.location.city.name }}</span>
+											</td>
+											<td>
+												<span>{{ proxy.location.isp }}</span>
+											</td>
+											<td>
+												<span>{{ proxy.location.zip }}</span>
+											</td>
+											<td>
+												<span>&mdash;</span>
+											</td>
+											<td>
+												<span>&mdash;</span>
+											</td>
+											<td>
+												<span>{{ proxy.info.type }}</span>
+											</td>
+											<td>
+												<span>{{ proxy.info.added }}</span>
+											</td>
+											<td>
+												<div class="flex ai_center jc_between">
+													<span>${{ proxy.price }}</span>
+													<a href="javascript:void(0);" @click="addToCart(proxy.id)" class="buy_now"></a>
+												</div>
+											</td>
+										</tr>
+										<tr class="per_page">
+											<td colspan="11" align="right">
+												<div class="pp">
+													<span>proxies per page</span>
+                                                    <a
+                                                        v-for="item in paginationValuesList"
+                                                        @click="perPage = item"
+                                                        :class="item === perPage ? 'active' : ''"
+                                                    >
+                                                        {{ item }}
+                                                    </a>
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								<ul class="pagination" style="display: none;">
+									<li>
+										<a href="#" class="prev"></a>
+									</li>
+									<li>
+										<a href="#" class="active">1</a>
+									</li>
+									<li>
+										<a href="#">2</a>
+									</li>
+									<li>
+										<a href="#">3</a>
+									</li>
+									<li>
+										<a href="#">4</a>
+									</li>
+									<li>
+										<a href="#">5</a>
+									</li>
+									<li>
+										<a href="#">6</a>
+									</li>
+									<li>
+										<a href="#">7</a>
+									</li>
+									<li>
+										<a href="#">8</a>
+									</li>
+									<li>
+										<a href="#">9</a>
+									</li>
+									<li>
+										<a href="#">10</a>
+									</li>
+									<li>
+										<a href="#">...</a>
+									</li>
+									<li>
+										<a href="#">150</a>
+									</li>
+									<li>
+										<a href="#">175</a>
+									</li>
+									<li>
+										<a href="#" class="next"></a>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="filter_right ip_data">
+							<div v-show="!selectedProxy.id" class="proxy_data">
+								<div class="pd_info">
+									<div class="alert badge">Select a Proxy for Info</div>
+								</div>
+							</div>
+							<div v-show="selectedProxy.id" class="proxy_data">
+								<div class="pd_info">
+									<h4>
+										<div class="icon icon_world"></div>
+										<span class="pi">IP</span>
+									</h4>
+									<p>
+										<span class="flag" :style="{ backgroundImage: `url(${selectedProxy.location.country.flag})` }"></span>
+										<span class="pi">{{ selectedProxy.location.ip }}</span>
+									</p>
+								</div>
+								<div class="pd_info">
+									<h4>
+										<div class="icon icon_location"></div>
+										<span class="pi">Location</span>
+									</h4>
+									<p>
+										<span>Country: {{ selectedProxy.location.country.name }}</span>
+									</p>
+									<p>
+										<span>Domain: {{ selectedProxy.location.domain }}</span>
+									</p>
+									<p>
+										<span>ORG: {{ selectedProxy.location.org }}</span>
+									</p>
+									<p>
+										<span>ISP: {{ selectedProxy.location.isp }}</span>
+									</p>
+									<p v-if="selectedProxy.location.state">
+										<span>State: {{ selectedProxy.location.state }}</span>
+									</p>
+									<p>
+										<span>City: {{ selectedProxy.location.city.name }}</span>
+									</p>
+									<p v-if="selectedProxy.location.zip">
+										<span>ZIP: {{ selectedProxy.location.zip }}</span>
+									</p>
+									<p>
+										<span>Zone: Europe</span>
+									</p>
+								</div>
+								<div class="pd_info">
+									<h4>
+										<div class="icon icon_info"></div>
+										<span>Blacklists</span>
+									</h4>
+									<p>
+										<span>Clean (in Spamhaus)</span>
+									</p>
+								</div>
+								<div class="pd_info">
+									<h4>
+										<div class="icon icon_cog"></div>
+										<span>Info</span>
+									</h4>
+									<p>
+										<span>Added: {{ selectedProxy.info.added }}</span>
+									</p>
+									<p>
+										<span>Type: {{ selectedProxy.info.type }}</span>
+									</p>
+									<p>
+										<span>Ping: {{ selectedProxy.info.ping }}</span>
+									</p>
+									<p>
+										<span>Speed: {{ selectedProxy.info.speed }}</span>
+									</p>
+									<p>
+										<span class="flex ai_center">DNS: <span class="flag"></span>{{ selectedProxy.ip }}</span>
+									</p>
+									<p>
+										<span>Usage: {{ selectedProxy.info.usage }}</span>
+									</p>
+								</div>
+							</div>
+							<div v-if="loggedIn" class="pro_block">
+								<h4>
+									<div class="icon icon_cart"></div>
+									<span v-show="cartTotal <= 0">Cart empty</span>
+                                    <span v-show="cartTotal > 0">Cart<span v-show="!hasActiveUnlimitedSubscription"> - ${{ cartTotal }}</span></span>
+								</h4>
+								<p class="gray" v-show="cartTotal <= 0">Click on proxy to buy it</p>
+								<div v-show="cartTotal > 0" class="items smaller">
+									<ul>
+										<li v-for="cartItem in cartItems">
+											<div class="item_flag" :style="{ backgroundImage: `url(${cartItem.country_data.flag})` }"></div>
+											<div class="item_ip">{{ cartItem.ip }}</div>
+											<div class="item_price" v-show="!hasActiveUnlimitedSubscription">${{ cartItem.price }}</div>
+											<button type="button" @click="deleteFromCart(cartItem.id);" class="remove"></button>
+										</li>
+									</ul>
+									<br />
+									<button type="button" @click="showCartModal()" :disabled="cartTotal <= 0" class="btn flex ai_center center width_auto">
+                                        <span v-if="hasActiveUnlimitedSubscription">
+                                            Buy
+                                        </span>
+                                        <span v-else>
+                                            Buy now ${{ cartTotal }}
+                                        </span>
+                                    </button>
+									<button v-if="!hasActiveUnlimitedSubscription" type="button" @click="showBuyUnlimitedModal()"  class="btn flex ai_center center width_auto margin_top_10">Buy unlimited ${{unlimitedSubscriptionPrice}}</button>
+                                    <div v-if="hasActiveUnlimitedSubscription">
+                                        <h2 class="margin_top_10">You have active unlimited subscription</h2>
+                                        <p>Expired at: {{unlimitedSubscription?.expired_at}}</p>
+                                    </div>
+								</div>
+							</div>
+                            <MyProxies v-if="loggedIn" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+        <SnackGeneral ref="snackbar" />
+	</section>
+</template>
+<script>
+    import MyProxies from "../components/ProxyCatalog/MyProxies.vue";
+    import BuyUnlimitedModal from "../components/Modals/BuyUnlimitedModal.vue";
+    import CartModal from "../components/ProxyCatalog/CartModal.vue";
+    import Socks5Mixin from "../mixins/Socks5Mixin.vue";
+    import SnackGeneral from "../components/Snacks/SnackGeneral.vue";
+    import BalanceMixin from "../mixins/BalanceMixin.vue";
+    import {authService} from "../services/api/AuthService.js";
+    import CartService from "../services/api/CartService.js";
+    import CatalogService from "../services/api/CatalogService.js";
+
+	export default {
+		name: 'ProxyCatalog',
+        components: {BuyUnlimitedModal, MyProxies, CartModal, SnackGeneral },
+        mixins: [ Socks5Mixin, BalanceMixin ],
+		data() {
+			return {
+
+				// loggedIn: authUser,
+				orderStatus: null,
+				orderMessage: null,
+                orderedProxies: [],
+				topFiltersShown: true,
+                autoRefresh: false,
+                timerId: false,
+				filters: new CatalogService({
+					filters: true,
+					eup: false,
+					ebp: false,
+					rop: false,
+					mp: false,
+					sp: false,
+					ip: null,
+					domain: null,
+					state: null,
+					city: null,
+					isp: null,
+					zip: null,
+					type: null,
+					added: null,
+					price: null,
+				}),
+				continentId: null,
+				countryId: null,
+				continents: [],
+				countries: [],
+				proxies: [],
+				types: [],
+				selectedProxy: {
+
+					id: null,
+					location: {
+
+						country: {
+							id: null,
+							country: null,
+							flag: null,
+						},
+						city: {
+							id: null,
+							name: null
+						},
+						domain: null,
+						org: null,
+						isp: null,
+						state: null,
+
+					},
+					blacklist: {
+						status: 'clear',
+					},
+					info: {
+
+						added: null,
+						type: null,
+						ping: null,
+						speed: null,
+						dns: null,
+						usage: null,
+
+					},
+					price: null,
+
+				},
+
+                hasActiveUnlimitedSubscription: false,
+                unlimitedSubscription: null,
+                unlimitedSubscriptionPrice: 0,
+
+                paginationValuesList: [ 25, 50, 75, 100, 150 ],
+				perPage: 25,
+
+				/* Cart */
+				cartItems: [],
+				cartItemsIDS: [],
+				cartTotal: 0,
+				cartModalShow: false
+
+			}
+		},
+		mounted() {
+
+			this.loadContinents();
+			this.loadCart();
+			this.selectContinent(4);
+            this.getActiveUnlimitedSubscription();
+			console.log('ProxyCatalog');
+
+		},
+		methods: {
+
+			// hexTokens: {
+			// 	S: {
+			// 		pattern: /[0-9\.]/,
+			// 	}
+			// },
+
+            showBuyUnlimitedModal() {
+                this.$refs.buyUnlimitedModal.show()
+            },
+
+			async confirmOrder(days) {
+
+				await (new CartService)
+                    .confirmOrder(days)
+					.then((res) => {
+
+						this.orderStatus = 'success';
+						this.orderMessage = res.data.message;
+                        this.orderedProxies = res.data.orderedProxies;
+
+                        this.setCardData(res.data.cartItems, res.data.cartTotal)
+                        this.getBalance();
+
+					})
+					.catch((err) => {
+
+						this.orderStatus = 'error';
+						this.orderMessage = err.response.data.message;
+
+					});
+
+			},
+
+			async filtersApply() {
+
+				await this.filters
+					.getCatalog()
+					.then((res) => {
+
+						if (res.data.status === 'success') {
+							this.proxies = res.data.result.proxies;
+						}
+
+					})
+					.catch((err) => {
+						console.error(err.response.data);
+					});
+
+			},
+
+			async addToCart(proxyId) {
+
+				this.cartItemsIDS.push(proxyId);
+
+				await (new CartService)
+                    .addToCart( proxyId )
+                    .then((res) => {
+
+                        if (res.data.status === 'success') {
+                            this.setCardData(res.data.cartItems, res.data.cartTotal)
+                            this.updateList();
+                        }
+
+                    }).catch((err) => {
+                        console.error(err.response.data);
+                    });
+
+			},
+
+            async updateCartItem(proxyId, days) {
+                await (new CartService)
+                    .updateCartItem( proxyId, days )
+                    .then((res) => {
+                        if (res.data.status === 'success') {
+                            this.setCardData(res.data.cartItems, res.data.cartTotal)
+                            this.updateList();
+                        }
+
+                    }).catch((err) => {
+                        console.error(err.response.data);
+                    });
+
+            },
+
+			async deleteFromCart(proxyId) {
+
+				await (new CartService)
+                    .removeFromCart( proxyId )
+					.then((res) => {
+
+                        this.setCardData(res.data.cartItems, res.data.cartTotal)
+						this.updateList();
+
+					})
+					.catch((err) => {
+						console.error(err.response.data);
+					});
+
+			},
+
+			async proxyInfo(proxy) {
+
+				this.selectedProxy = proxy;
+
+			},
+
+			async selectContinent(continentId) {
+
+				this.continentId = continentId;
+				this.countryId = null;
+
+				await this.updateList();
+
+			},
+
+			async updateList() {
+                await (new CatalogService)
+                    .postCatalog({
+                        continentId: this.continentId,
+                        countryId: this.countryId,
+                        count: this.perPage
+                    })
+					.then((res) => {
+
+						this.continents = res.data.result.continents;
+						this.countries = res.data.result.countries;
+						this.proxies = res.data.result.proxies;
+						this.types = res.data.result.types;
+
+					})
+					.catch((err) => {
+						console.error(err.response.data);
+					});
+
+			},
+
+			async selectCountry(countryId) {
+
+				this.countryId = countryId;
+
+				await this.updateList();
+
+			},
+
+			async loadContinents() {
+
+                await (new CatalogService)
+                    .getCatalog()
+					.then((res) => {
+
+						this.test = 'yes';
+						this.continents = res.data.result.continents;
+						// this.proxies = res.data.result.proxies;
+
+					})
+					.catch((err) => {
+						console.error(err.response.data);
+					});
+
+			},
+
+			async loadCart() {
+
+				await (new CartService)
+                    .getCart()
+					.then((res) => {
+                        this.setCardData(res.data.cartItems, res.data.cartTotal)
+					})
+					.catch((err) => {
+						console.error(err.response.data);
+					});
+
+			},
+
+			async resetTopFilters() {
+
+				this.filters.reset();
+				await this.updateList();
+
+			},
+
+			async priceMask(evt) {
+
+				evt = (evt) ? evt : window.event;
+				const charCode = (evt.which) ? evt.which : evt.keyCode;
+				if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+					evt.preventDefault();
+				}
+				else {
+					return true;
+				}
+
+			},
+
+            setCardData(cartItems, cartTotal) {
+                this.cartItems = cartItems;
+                this.cartTotal = cartTotal;
+
+                this.$store.commit('setCart', {
+                    cartItems: this.cartItems,
+                    cartTotal: parseFloat(this.cartTotal)
+                })
+            },
+
+            showCartModal() {
+                this.orderedProxies = [];
+                this.orderStatus = this.orderMessage = null;
+                if('' !== this.socks5Auth.username || '' !== this.socks5Auth.password) {
+                    this.cartModalShow = true;
+                } else {
+                    this.$refs.snackbar.showSnackbar(`Please set up Socks5 credentials`);
+                }
+            },
+
+            async boughtUnlimitedSubscription() {
+                await this.getActiveUnlimitedSubscription();
+                await this.getBalance();
+                await this.loadCart();
+            },
+
+            async getActiveUnlimitedSubscription() {
+                await axios.get('/api/unlimited-subscriptions/active', {
+                    headers: { ...authService.getAuthHeader() }
+                })
+                    .then(res => {
+                        this.hasActiveUnlimitedSubscription  = res.data.has_active_subscription;
+                        this.unlimitedSubscription  = res.data.data;
+                        this.unlimitedSubscriptionPrice  = res.data.price;
+                    })
+                    .catch(err => {
+                        console.error(err)
+                    })
+            }
+		},
+        watch: {
+            autoRefresh(newVal) {
+                if(newVal) {
+                    this.timerId = setInterval(()=>{
+                        this.filtersApply()
+                    }, 10000)
+                } else {
+                    clearInterval(this.timerId)
+                }
+            },
+
+            perPage() {
+                this.updateList();
+            },
+        },
+        computed: {
+            loggedIn() {
+                return this.$store.getters.loggedIn
+            }
+        }
+	}
+</script>
